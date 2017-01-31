@@ -19,14 +19,14 @@ Phone number regex decison tree :
         |                           |                                                                 |
  10 digit number              Mobile Number                                                   Landline Number
      \d{10}                         |                                                                 |
-                            Different Patterns                                                   Different Patterns                
+                            Different Patterns                                                   Different Patterns
                       ------------------------------                            ----------------------------------------------------------
                       |                            |                            |                             |                          |
                3-3-4 digit code               2-3-5 digit code             2-8 digit code              3-7 digit code             4-6 digit code
             (starting with 7,8,9)           (starting with 7,8,9)               |                             |                          |
                       |                            |                  (?:\d{2}(?:\s|-)\d{8})      (?:\d{3}(?:\s|-)\d{7})   (?:\d{4}(?:\s|-)\d{6})
                       |                            |
-(?:\d{3}(?:\s|-)\d{3}(?:\s|-)\d{9})   (?:\d{2}(?:\s|-)\d{3}(?:\s|-)\d{5})   
+(?:\d{3}(?:\s|-)\d{3}(?:\s|-)\d{9})   (?:\d{2}(?:\s|-)\d{3}(?:\s|-)\d{5})
 """
 
 import re
@@ -34,36 +34,49 @@ import os
 import csv
 import argparse
 
-WHITE_SPACES = r'(?:\s+|)'
+# Checks for leading whitespace characters or start of string
+START_SPACES = r'(?:(?<=\s)|(?<=^))'
+# Checks for possible phone prefixes
 PHONE_PREFIXES = r'(0|(?:(\+|)91)|(?:\((\+|)91)\))'
-I_SPACES = r'(?:\s|-)'
+# Checks for intermediate space or dash
+I_SPACES = r'(?:\s|\-|)'
+# Checks for simple 10 digit number
 CODE_10 = r'\d{10}'
-M_CODE_3_3_4 = r'(?:\d{3}(?:\s|-)\d{3}(?:\s|-)\d{9})'
-M_CODE_2_3_5 = r'(?:\d{2}(?:\s|-)\d{3}(?:\s|-)\d{5})'
-L_CODE_2_8 = r'(?:\d{2}(?:\s|-)\d{8})'
-L_CODE_3_7 = r'(?:\d{3}(?:\s|-)\d{7})'
-L_CODE_4_6 = r'(?:\d{4}(?:\s|-)\d{6})'
+# Checks for mobile numbers written in pattern of 3-3-4 digits
+M_CODE_3_3_4 = r'(?:[789]\d{2}(?:\s|\-|)\d{3}(?:\s|\-|)\d{9})'
+# Checks for mobile numbers written in pattern of 2-3-5 digits
+M_CODE_2_3_5 = r'(?:[789]\d{1}(?:\s|\-|)\d{3}(?:\s|\-|)\d{5})'
+# Checks for mobile numbers written in pattern of 5-5 digits
+M_CODE_5_5 = r'(?:[789]\d{4}(?:\s|\-|)\d{5})'
+# Checks for landline numbers written in pattern of 2-8 digits
+L_CODE_2_8 = r'(?:\d{2}(?:\s|\-|)\d{8})'
+# Checks for landline numbers written in pattern of 3-7 digits
+L_CODE_3_7 = r'(?:\d{3}(?:\s|\-|)\d{7})'
+# Checks for landline numbers written in pattern of 4-6 digits
+L_CODE_4_6 = r'(?:\d{4}(?:\s|\-|)\d{6})'
+# Checks for trailing whitespaces or end of string
+END_SPACES = r'(?:$|\s+)'
 
-PHONE_REGEX_STR = WHITE_SPACES+r'('+PHONE_PREFIXES+I_SPACES
-PHONE_REGEX_STR += CODE_10+r'|'+M_CODE_3_3_4+r'|'+M_CODE_2_3_5+r'|'
-PHONE_REGEX_STR += L_CODE_2_8+r'|'+L_CODE_3_7+r'|'+L_CODE_4_6+r')'
-PHONE_REGEX_STR += WHITE_SPACES
+PHONE_REGEX_STR = START_SPACES+r'('+PHONE_PREFIXES+I_SPACES+r'(?:'
+PHONE_REGEX_STR += CODE_10+r'|'+M_CODE_3_3_4+r'|'+M_CODE_2_3_5+r'|'+M_CODE_5_5
+PHONE_REGEX_STR += r'|'+L_CODE_2_8+r'|'+L_CODE_3_7+r'|'+L_CODE_4_6+r'))'
+PHONE_REGEX_STR += END_SPACES
 
 DEFAULT_PHONE_REGEX = re.compile(PHONE_REGEX_STR)
 DEFAULT_FILE_EXT = '.txt'
 
 def scan_dir(root_dir, file_ext=DEFAULT_FILE_EXT, csv_writer=None, phone_regex=DEFAULT_PHONE_REGEX):
     """
-    Recursively traverse the root_dir and scan each text file for 
+    Recursively traverse the root_dir and scan each text file for
     phone numbers. Then save the extracted phone numbers in a csv file.
 
     Assumptions
     -----------
 
         1. A text file has .txt extension otherwise the given extension
-        2. There are no soft links or symlinks, therefore no file system 
+        2. There are no soft links or symlinks, therefore no file system
            loops will be encountered while recursive traversal
-        3. os.walk() is intentionally not used in order to write the 
+        3. os.walk() is intentionally not used in order to write the
            recursive function on my own
     """
 
@@ -75,21 +88,21 @@ def scan_dir(root_dir, file_ext=DEFAULT_FILE_EXT, csv_writer=None, phone_regex=D
         if os.path.isdir(file_name):
             if csv_writer:
                 scan_dir(
-                    file_name, 
-                    file_ext=file_ext, 
-                    csv_writer=csv_writer, 
+                    file_name,
+                    file_ext=file_ext,
+                    csv_writer=csv_writer,
                     phone_regex=phone_regex)
             else:
                 yield from scan_dir(
-                    file_name, 
-                    file_ext=file_ext, 
+                    file_name,
+                    file_ext=file_ext,
                     phone_regex=phone_regex)
 
         # Else if file_name is a text file
         elif file_name.endswith(file_ext):
             if csv_writer:
                 for ph_number in extract_phone_no(file_name, phone_regex):
-                    csv_writer.writerow([ph_number[0]])
+                    csv_writer.writerow(ph_number)
             else:
                 yield from extract_phone_no(file_name, phone_regex)
 
@@ -124,15 +137,15 @@ def extract_phone_no(file_name, phone_regex):
 
     Landline numbers :
 
-    022-24130000 
+    022-24130000
     080 25478965
     0-80-25478965
-    0416-2565478 
-    08172-268032 
-    04512-895612 
+    0416-2565478
+    08172-268032
+    04512-895612
     0-4512-895612
-    02162-240000 
-    022-24141414 
+    02162-240000
+    022-24141414
     079-22892350
 
     +91 80 25478965
@@ -153,13 +166,13 @@ def extract_phone_no(file_name, phone_regex):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "targetdir", 
+        "targetdir",
         help="Root directory from where phone numbers are to be extracted")
     parser.add_argument(
-        "--outputcsvfile", 
+        "--outputcsvfile",
         help="Destination file for saving phone numbers")
     parser.add_argument(
-        "--file_extension", 
+        "--file_extension",
         help="Extension of text files. Eg : txt, doc, csv")
 
     args = parser.parse_args()
@@ -169,8 +182,8 @@ def main():
             contact_writer = csv.writer(wt)
             if args.file_extension:
                 scan_dir(
-                    args.targetdir, 
-                    file_ext=args.file_extension, 
+                    args.targetdir,
+                    file_ext=args.file_extension,
                     csv_writer=contact_writer)
             else:
                 scan_dir(
@@ -178,7 +191,9 @@ def main():
                     csv_writer=contact_writer)
     else:
         if args.file_extension:
-            for ph_numbers in scan_dir(args.targetdir, file_ext=args.file_extension):
+            for ph_numbers in scan_dir(
+                                args.targetdir,
+                                file_ext=args.file_extension):
                 print(ph_numbers)
         else:
             for ph_numbers in scan_dir(args.targetdir):
