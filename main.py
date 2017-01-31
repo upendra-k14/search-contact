@@ -28,7 +28,7 @@ Phone number regex decison tree
             (starting with 7,8,9)                 (starting with 7,8,9)        (starting with 7,8,9)                   |                             |                          |
                       |                                    |                               |                    (?:\d{2}(?:\s|\-|)\d{8})      (?:\d{3}(?:\s|\-|)\d{7})   (?:\d{4}(?:\s|\-|)\d{6})
                       |                                    |                               |
-(?:[789]\d{2}(?:\s|\-|)\d{3}(?:\s|\-|)\d{9}) (?:[789]\d{1}(?:\s|\-|)\d{3}(?:\s|\-|)\d{5})  |
+(?:[789]\d{2}(?:\s|\-|)\d{3}(?:\s|\-|)\d{4}) (?:[789]\d{1}(?:\s|\-|)\d{3}(?:\s|\-|)\d{5})  |
                                                                                            |
                                                                               (?:[789]\d{4}(?:\s|\-|)\d{5})
 ```
@@ -64,7 +64,7 @@ I_SPACES = r'(?:\s|\-|)'
 # Checks for simple 10 digit number
 CODE_10 = r'\d{10}'
 # Checks for mobile numbers written in pattern of 3-3-4 digits
-M_CODE_3_3_4 = r'(?:[789]\d{2}(?:\s|\-|)\d{3}(?:\s|\-|)\d{9})'
+M_CODE_3_3_4 = r'(?:[789]\d{2}(?:\s|\-|)\d{3}(?:\s|\-|)\d{4})'
 # Checks for mobile numbers written in pattern of 2-3-5 digits
 M_CODE_2_3_5 = r'(?:[789]\d{1}(?:\s|\-|)\d{3}(?:\s|\-|)\d{5})'
 # Checks for mobile numbers written in pattern of 5-5 digits
