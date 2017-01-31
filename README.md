@@ -54,14 +54,20 @@ Usage
 
 `python3 main.py [-h] targetdir [--outputcsvfile OUTPUTCSVFILE] [--file_extension FILE_EXTENSION]`
 
-positional arguments:
-  targetdir             Root directory from where phone numbers are to be
-                        extracted
+  Positional Arguments
+  ---------------------
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --outputcsvfile OUTPUTCSVFILE
+    targetdir             Root directory from where phone numbers are to be
+                          extracted
+
+  Optional Arguments
+  -------------------
+  
+    -h, --help            show this help message and exit
+  
+    --outputcsvfile OUTPUTCSVFILE
                         Destination file for saving phone numbers
-  --file_extension FILE_EXTENSION
+                        
+    --file_extension FILE_EXTENSION
                         Extension of text files. Eg : txt, doc, csv
 
