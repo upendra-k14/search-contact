@@ -35,7 +35,7 @@ import csv
 import argparse
 
 WHITE_SPACES = r'(?:\s+|)'
-PHONE_PREFIXES = r'(0|(?:(\+|)91)|(?:\((\+|)91)\))'
+PHONE_PREFIXES = r'((0|(?:(\+|)91)|(?:\((\+|)91)\))'
 I_SPACES = r'(?:\s|-)'
 CODE_10 = r'\d{10}'
 M_CODE_3_3_4 = r'(?:\d{3}(?:\s|-)\d{3}(?:\s|-)\d{9})'
@@ -86,10 +86,10 @@ def scan_dir(root_dir, file_ext=DEFAULT_FILE_EXT, csv_writer=None, phone_regex=D
                     phone_regex=phone_regex)
 
         # Else if file_name is a text file
-        elif file_name.endswith(file_ext):
+        elif file_name.endswith(file_extension):
             if csv_writer:
                 for ph_number in extract_phone_no(file_name, phone_regex):
-                    csv_writer.writerow([ph_number[0]])
+                    csv_writer.writerow([ph_number])
             else:
                 yield from extract_phone_no(file_name, phone_regex)
 
@@ -102,7 +102,7 @@ def extract_phone_no(file_name, phone_regex):
 
     7,8,9
 
-    +917036141002
+    +917036141002how are you 87987592757825287258728574584652785625782592785269824609860938360985094578 93468039630 8384635860596059 999999999999999999
     +91 7036141002
     +91-7036141002
     +91 7036141002
@@ -181,8 +181,15 @@ def main():
             for ph_numbers in scan_dir(args.targetdir, file_ext=args.file_extension):
                 print(ph_numbers)
         else:
-            for ph_numbers in scan_dir(args.targetdir):
+            scan_dir(args.targetdir)
                 print(ph_numbers)
 
 if __name__ == "__main__":
     main()
+
+
+
+    
+
+
+
