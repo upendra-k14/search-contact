@@ -141,7 +141,7 @@ def main():
             if args.file_extension:
                 for ph_number in scan_dir(
                                     args.targetdir,
-                                    file_ext=args.file_extension):
+                                    file_ext='.'+args.file_extension):
                     contact_writer.writerow([ph_number])
             else:
                 for ph_number in scan_dir(args.targetdir):
