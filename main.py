@@ -125,59 +125,12 @@ def scan_dir(root_dir, file_ext=DEFAULT_FILE_EXT, csv_writer=None, phone_regex=D
 
 def extract_phone_no(file_name, phone_regex):
     """
-    Examples of phone numbers :
-
-    Mobile numbers :
-
-    7,8,9
-
-    +917036141002
-    +91 7036141002
-    +91-7036141002
-    +91 7036141002
-    917036141002
-    91 7036141002
-    7036141002
-    07036141002
-    0 7036141002
-    0-7036141002
-    70361 41002
-    070361 41002
-    0 70361 41002
-    70 361 41002
-    070 361 41002
-    070-361-41002
-    0 70 361 41002
-    (+91)7036141002
-
-
-    Landline numbers :
-
-    022-24130000
-    080 25478965
-    0-80-25478965
-    0416-2565478
-    08172-268032
-    04512-895612
-    0-4512-895612
-    02162-240000
-    022-24141414
-    079-22892350
-
-    +91 80 25478965
-    +91 416 2565478
-    +91 8172 268032
-
-    +91-80-25478965
-    +91-0416-2565478
-    +91-8172-268032
-
-    (+91)8025478965
+    Extracts the phone number from file
     """
 
     with open(file_name) as fin:
         for ph_numbers in phone_regex.findall(fin.read()):
-            yield ph_numbers
+            yield ph_numbers[0]
 
 def main():
     parser = argparse.ArgumentParser()
@@ -209,7 +162,7 @@ def main():
         if args.file_extension:
             for ph_numbers in scan_dir(
                                 args.targetdir,
-                                file_ext=args.file_extension):
+                                file_ext='.'+args.file_extension):
                 print(ph_numbers)
         else:
             for ph_numbers in scan_dir(args.targetdir):

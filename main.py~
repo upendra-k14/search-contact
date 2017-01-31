@@ -15,12 +15,11 @@ Phone number regex decison tree :
                                                                     |
                                                                     |
                                                                     |
-        ----------------------------------------------------------------------------------------------------------------------
-        |                                    |                                                                               |
- 10 digit number                       Mobile Number                                                                   Landline Number
-     \d{10}                                  |                                                                               |
-                                     Different Patterns                                                               Different Patterns
-
+        ----------------------------------------------------------------------------------------------------------------------------------------------
+        |                                    |                                                                                                       |
+ 10 digit number                       Mobile Number                                                                                         Landline Number
+     \d{10}                                  |                                                                                                       |
+                                     Different Patterns                                                                                     Different Patterns
                       ----------------------------------------------------------------------                            ----------------------------------------------------------
                       |                                    |                               |                           |                             |                          |
                3-3-4 digit code                     2-3-5 digit code                5-5 digit code               2-8 digit code              3-7 digit code             4-6 digit code

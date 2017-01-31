@@ -3,6 +3,7 @@ Recursively searches the contact numbers in text files in a given directory
 
 Phone number regex decison tree
 -------------------------------
+```
 
 
 
@@ -30,6 +31,7 @@ Phone number regex decison tree
                       |                                    |                               |                    (?:\d{2}(?:\s|-)\d{8})      (?:\d{3}(?:\s|-)\d{7})   (?:\d{4}(?:\s|-)\d{6})
                       |                                    |                               |
 (?:[789]\d{2}(?:\s|\-|)\d{3}(?:\s|\-|)\d{9})   (?:\d{2}(?:\s|-)\d{3}(?:\s|-)\d{5})   (?:[789]\d{4}(?:\s|\-|)\d{5})
+```
 
 Explanations for different patterns :
 
