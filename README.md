@@ -28,7 +28,7 @@ Phone number regex decison tree
                       |                                    |                               |                           |                             |                          |
                3-3-4 digit code                     2-3-5 digit code                5-5 digit code               2-8 digit code              3-7 digit code             4-6 digit code
             (starting with 7,8,9)                 (starting with 7,8,9)        (starting with 7,8,9)                   |                             |                          |
-                      |                                    |                               |                    (?:\d{2}(?:\s|-)\d{8})      (?:\d{3}(?:\s|-)\d{7})   (?:\d{4}(?:\s|-)\d{6})
+                      |                                    |                               |                    (?:\d{2}(?:\s|\-|)\d{8})      (?:\d{3}(?:\s|\-|)\d{7})   (?:\d{4}(?:\s|\-|)\d{6})
                       |                                    |                               |
 (?:[789]\d{2}(?:\s|\-|)\d{3}(?:\s|\-|)\d{9})   (?:\d{2}(?:\s|-)\d{3}(?:\s|-)\d{5})   (?:[789]\d{4}(?:\s|\-|)\d{5})
 ```
@@ -48,3 +48,20 @@ Landline Numbers
  1. 2-8 digit code : 2 digit STD code, 8 digit local subscriber code
  2. 3-7 digit code : 3 digit STD code, 7 digit local subscriber code
  3. 4-6 digit code : 4 digit STD code, 6 digit local subscriber code
+ 
+Usage
+-----
+
+`python3 main.py [-h] targetdir [--outputcsvfile OUTPUTCSVFILE] [--file_extension FILE_EXTENSION]`
+
+positional arguments:
+  targetdir             Root directory from where phone numbers are to be
+                        extracted
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --outputcsvfile OUTPUTCSVFILE
+                        Destination file for saving phone numbers
+  --file_extension FILE_EXTENSION
+                        Extension of text files. Eg : txt, doc, csv
+
