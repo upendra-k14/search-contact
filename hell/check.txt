@@ -19,14 +19,14 @@ Phone number regex decison tree :
         |                           |                                                                 |
  10 digit number              Mobile Number                                                   Landline Number
      \d{10}                         |                                                                 |
-                            Different Patterns                                                   Different Patterns                
+                            Different Patterns                                                   Different Patterns
                       ------------------------------                            ----------------------------------------------------------
                       |                            |                            |                             |                          |
                3-3-4 digit code               2-3-5 digit code             2-8 digit code              3-7 digit code             4-6 digit code
             (starting with 7,8,9)           (starting with 7,8,9)               |                             |                          |
                       |                            |                  (?:\d{2}(?:\s|-)\d{8})      (?:\d{3}(?:\s|-)\d{7})   (?:\d{4}(?:\s|-)\d{6})
                       |                            |
-(?:\d{3}(?:\s|-)\d{3}(?:\s|-)\d{9})   (?:\d{2}(?:\s|-)\d{3}(?:\s|-)\d{5})   
+(?:\d{3}(?:\s|-)\d{3}(?:\s|-)\d{9})   (?:\d{2}(?:\s|-)\d{3}(?:\s|-)\d{5})
 """
 
 import re
@@ -54,16 +54,16 @@ DEFAULT_FILE_EXT = '.txt'
 
 def scan_dir(root_dir, file_ext=DEFAULT_FILE_EXT, csv_writer=None, phone_regex=DEFAULT_PHONE_REGEX):
     """
-    Recursively traverse the root_dir and scan each text file for 
+    Recursively traverse the root_dir and scan each text file for
     phone numbers. Then save the extracted phone numbers in a csv file.
 
     Assumptions
     -----------
 
         1. A text file has .txt extension otherwise the given extension
-        2. There are no soft links or symlinks, therefore no file system 
+        2. There are no soft links or symlinks, therefore no file system
            loops will be encountered while recursive traversal
-        3. os.walk() is intentionally not used in order to write the 
+        3. os.walk() is intentionally not used in order to write the
            recursive function on my own
     """
 
@@ -75,14 +75,14 @@ def scan_dir(root_dir, file_ext=DEFAULT_FILE_EXT, csv_writer=None, phone_regex=D
         if os.path.isdir(file_name):
             if csv_writer:
                 scan_dir(
-                    file_name, 
-                    file_ext=file_ext, 
-                    csv_writer=csv_writer, 
+                    file_name,
+                    file_ext=file_ext,
+                    csv_writer=csv_writer,
                     phone_regex=phone_regex)
             else:
                 yield from scan_dir(
-                    file_name, 
-                    file_ext=file_ext, 
+                    file_name,
+                    file_ext=file_ext,
                     phone_regex=phone_regex)
 
         # Else if file_name is a text file
@@ -124,15 +124,15 @@ def extract_phone_no(file_name, phone_regex):
 
     Landline numbers :
 
-    022-24130000 
+    022-24130000
     080 25478965
     0-80-25478965
-    0416-2565478 
-    08172-268032 
-    04512-895612 
+    0416-2565478
+    08172-268032
+    04512-895612
     0-4512-895612
-    02162-240000 
-    022-24141414 
+    02162-240000
+    022-24141414
     079-22892350
 
     +91 80 25478965
@@ -153,13 +153,13 @@ def extract_phone_no(file_name, phone_regex):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "targetdir", 
+        "targetdir",
         help="Root directory from where phone numbers are to be extracted")
     parser.add_argument(
-        "--outputcsvfile", 
+        "--outputcsvfile",
         help="Destination file for saving phone numbers")
     parser.add_argument(
-        "--file_extension", 
+        "--file_extension",
         help="Extension of text files. Eg : txt, doc, csv")
 
     args = parser.parse_args()
@@ -169,8 +169,8 @@ def main():
             contact_writer = csv.writer(wt)
             if args.file_extension:
                 scan_dir(
-                    args.targetdir, 
-                    file_ext=args.file_extension, 
+                    args.targetdir,
+                    file_ext=args.file_extension,
                     csv_writer=contact_writer)
             else:
                 scan_dir(
@@ -189,7 +189,7 @@ if __name__ == "__main__":
 
 
 
-    
+
 
 
 
