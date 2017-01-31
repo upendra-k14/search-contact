@@ -1,5 +1,7 @@
 """
-Phone number regex decison tree :
+Phone number regex decison tree
+-------------------------------
+```
 
 
 
@@ -24,9 +26,12 @@ Phone number regex decison tree :
                       |                                    |                               |                           |                             |                          |
                3-3-4 digit code                     2-3-5 digit code                5-5 digit code               2-8 digit code              3-7 digit code             4-6 digit code
             (starting with 7,8,9)                 (starting with 7,8,9)        (starting with 7,8,9)                   |                             |                          |
-                      |                                    |                               |                    (?:\d{2}(?:\s|-)\d{8})      (?:\d{3}(?:\s|-)\d{7})   (?:\d{4}(?:\s|-)\d{6})
+                      |                                    |                               |                    (?:\d{2}(?:\s|\-|)\d{8})      (?:\d{3}(?:\s|\-|)\d{7})   (?:\d{4}(?:\s|\-|)\d{6})
                       |                                    |                               |
-(?:[789]\d{2}(?:\s|\-|)\d{3}(?:\s|\-|)\d{9})   (?:\d{2}(?:\s|-)\d{3}(?:\s|-)\d{5})   (?:[789]\d{4}(?:\s|\-|)\d{5})
+(?:[789]\d{2}(?:\s|\-|)\d{3}(?:\s|\-|)\d{9}) (?:[789]\d{1}(?:\s|\-|)\d{3}(?:\s|\-|)\d{5})  |
+                                                                                           |
+                                                                              (?:[789]\d{4}(?:\s|\-|)\d{5})
+```
 
 Explanations for different patterns :
 
