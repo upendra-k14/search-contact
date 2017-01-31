@@ -81,7 +81,7 @@ PHONE_REGEX_STR += END_SPACES
 DEFAULT_PHONE_REGEX = re.compile(PHONE_REGEX_STR)
 DEFAULT_FILE_EXT = '.txt'
 
-def scan_dir(root_dir, file_ext=DEFAULT_FILE_EXT, csv_writer=None, phone_regex=DEFAULT_PHONE_REGEX):
+def scan_dir(root_dir, file_ext=DEFAULT_FILE_EXT, phone_regex=DEFAULT_PHONE_REGEX):
     """
     Recursively traverse the root_dir and scan each text file for
     phone numbers. Then save the extracted phone numbers in a csv file.
@@ -102,25 +102,14 @@ def scan_dir(root_dir, file_ext=DEFAULT_FILE_EXT, csv_writer=None, phone_regex=D
 
         # If file_name is subdirectory
         if os.path.isdir(file_name):
-            if csv_writer:
-                scan_dir(
-                    file_name,
-                    file_ext=file_ext,
-                    csv_writer=csv_writer,
-                    phone_regex=phone_regex)
-            else:
-                yield from scan_dir(
-                    file_name,
-                    file_ext=file_ext,
-                    phone_regex=phone_regex)
+            yield from scan_dir(
+                file_name,
+                file_ext=file_ext,
+                phone_regex=phone_regex)
 
         # Else if file_name is a text file
         elif file_name.endswith(file_ext):
-            if csv_writer:
-                for ph_number in extract_phone_no(file_name, phone_regex):
-                    csv_writer.writerow(ph_number)
-            else:
-                yield from extract_phone_no(file_name, phone_regex)
+            yield from extract_phone_no(file_name, phone_regex)
 
 
 def extract_phone_no(file_name, phone_regex):
@@ -150,14 +139,13 @@ def main():
         with open(args.outputcsvfile,"w") as wt:
             contact_writer = csv.writer(wt)
             if args.file_extension:
-                scan_dir(
-                    args.targetdir,
-                    file_ext=args.file_extension,
-                    csv_writer=contact_writer)
+                for ph_number in scan_dir(
+                                    args.targetdir,
+                                    file_ext=args.file_extension):
+                    contact_writer.writerow([ph_number])
             else:
-                scan_dir(
-                    args.targetdir,
-                    csv_writer=contact_writer)
+                for ph_number in scan_dir(args.targetdir):
+                    contact_writer.writerow([ph_number])
     else:
         if args.file_extension:
             for ph_numbers in scan_dir(
